@@ -1,0 +1,27 @@
+body { background-color:palevioletred;
+color:pink;
+font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+margin:20ox;
+}
+
+header { 
+    text-align: center;
+    border-bottom:2px dashed purple;
+    padding-bottom: 14px;
+}
+
+h1 {
+    color: slateblue;
+    font-size: 3.0em;
+    margin-top: 10px;
+
+}
+
+h2 { 
+    color:slateblue;
+    font-size: 3.0;
+    padding : 10px 14px;
+    letter-spacing:1px;
+    margin-top: 10px;
+
+}
