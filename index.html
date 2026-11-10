@@ -1,46 +1,1050 @@
 <!-- Hadia Emaan, 26i3087
 -->
-
-   <!DOCTYPE html>
-   <html lang="en">
-   <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyPets! </title>
-    <style>
-        body {
-            font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            background:pink;
+    <title>Paws & Hearts - Pet Adoption Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Quicksand & Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: '#FCE7F3',
+                        pastelPinkDark: '#F472B6',
+                        pastelBlue: '#E0F2FE',
+                        pastelBlueDark: '#38BDF8',
+                        pastelPurple: '#F3E8FF',
+                        pastelPurpleDark: '#C084FC',
+                        pastelLavender: '#E0E7FF',
+                        pastelLavenderDark: '#818CF8',
+                        pastelGreen: '#DCFCE7',
+                        pastelGreenDark: '#4ADE80',
+                        pastelRed: '#FEE2E2',
+                        pastelRedDark: '#F87171',
+                    },
+                    fontFamily: {
+                        sans: ['Quicksand', 'Poppins', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif']
+                    }
+                }
+            }
         }
-        </style>
-   </head>
-   <body>
-    <h1>MyPets!</h1>
-    <h2 style="background-color:slateblue;"></h2>Adopt Me!</h2>
-    <h2 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Adopt Me!</h2>
-    <h3 style="background-color:rgb(9, 66, 139) ;"></h3>Portfolio!</body>h3>
+    </script>
+
+    <style>
+        /* Disable ALL CSS transitions and animations per instructions */
+        *, *::before, *::after {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #FCE7F3;
+            min-height: 100vh;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* Handwritten Sketch Underline style */
+        .sketch-underline {
+            position: relative;
+            display: inline-block;
+        }
+        .sketch-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 5%;
+            width: 90%;
+            height: 5px;
+            background-color: #C084FC;
+            border-radius: 999px;
+        }
+
+        .card-border {
+            border: 4px solid #ffffff;
+        }
+
+        /* Page visibility handling */
+        .page-view {
+            display: none;
+        }
+        .page-view.active-page {
+            display: block;
+        }
+
+        /* Modal Overlay */
+        .modal {
+            display: none;
+        }
+        .modal.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="p-3 sm:p-6 lg:p-8">
+
+    <!-- Outer Application Container Frame -->
+    <div class="max-w-6xl mx-auto bg-pastelPurple rounded-3xl card-border overflow-hidden">
+
+        <!-- GLOBAL HEADER / NAVBAR -->
+        <header class="bg-pastelLavender px-6 py-4 border-b border-purple-200 flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            <!-- Logo & Brand -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="bg-pastelPink p-2.5 rounded-2xl border border-pink-200 text-pink-500 text-xl">
+                    <i class="fa-solid fa-paw"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-xl text-purple-950 tracking-tight font-heading">Paws & Hearts</h1>
+                    <p class="text-[11px] text-purple-700 font-bold uppercase tracking-wider">Pet Adoption Platform</p>
+                </div>
+            </div>
+
+            <!-- Page Navigation Tabs (Home, Adopt, Contact) -->
+            <nav class="flex items-center gap-1.5 sm:gap-2 bg-pastelPink p-1.5 rounded-2xl border border-pink-200">
+                <button id="navHomeBtn" onclick="navigateTo('home')" class="px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-500 text-white">
+                    <i class="fa-solid fa-house mr-1"></i> Home
+                </button>
+                <button id="navAdoptBtn" onclick="navigateTo('adopt')" class="px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold text-purple-800 hover:bg-purple-100">
+                    <i class="fa-solid fa-heart mr-1"></i> Adopt Pets
+                </button>
+                <button id="navContactBtn" onclick="navigateTo('contact')" class="px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold text-purple-800 hover:bg-purple-100">
+                    <i class="fa-solid fa-envelope mr-1"></i> Contact Us
+                </button>
+            </nav>
+
+            <!-- Adoption Cart Badge Counter -->
+            <div class="flex items-center gap-3">
+                <div class="bg-pastelPink text-pink-700 font-bold px-4 py-2 rounded-2xl text-xs flex items-center gap-2 border border-pink-200">
+                    <i class="fa-solid fa-cart-shopping text-pink-500"></i>
+                    <span>Adoption Cart:</span>
+                    <span id="cartCount" class="bg-pink-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-[11px] font-extrabold">0</span>
+                </div>
+            </div>
+        </header>
 
 
-   </body>
+        <!-- ================================================================= -->
+        <!-- 1. HOME PAGE VIEW                                                 -->
+        <!-- ================================================================= -->
+        <section id="homePage" class="page-view active-page">
+            
+            <!-- Hero Banner Section -->
+            <div class="bg-pastelBlue p-6 sm:p-12 border-b border-sky-200 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-7 space-y-4">
+                    <span class="bg-pastelPink text-pink-700 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider border border-pink-200 inline-block">
+                        🐾 Find your best friend
+                    </span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold text-purple-950 font-heading leading-tight">
+                        Give a Loving Home to a Furry Friend!
+                    </h2>
+                    <p class="text-purple-800 text-base font-medium leading-relaxed">
+                        Hundreds of cute kittens, energetic puppies, and gentle senior pets are looking for their forever families. Explore our verified pet portfolios and start your adoption journey today.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-4">
+                        <button onclick="navigateTo('adopt')" class="px-8 py-3.5 bg-pink-400 text-white font-extrabold rounded-2xl border border-pink-500 flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <span>Find Your Perfect Pet</span>
+                        </button>
+                        <a href="#featuredPets" class="px-6 py-3.5 bg-pastelPurple text-purple-900 font-bold rounded-2xl border border-purple-300 flex items-center gap-2">
+                            <span>Browse Featured Pets</span>
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </a>
+                    </div>
+                </div>
 
-   <table>
-  <tr>
-    <th>Portfolio</th>
-    <th>Quality</th>
-  </tr>
-  <tr>
-    <td>Name:</td>
-    <td>Alfred!</td>
-  </tr>
-  <tr>
-    <td>Age:</td>
-    <td>4 months</td>
-  <tr>
-     <td>Weight:</td>   
-     <td>2kg</td> 
-  </tr>
-   
-  </tr>
-</table>
+                <!-- Hero Image Illustration -->
+                <div class="md:col-span-5">
+                    <div class="bg-pastelPink p-3 rounded-3xl border-4 border-white shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=600&q=80" 
+                             alt="Happy dogs and cats" 
+                             class="w-full aspect-[4/3] object-cover rounded-2xl border border-pink-200"
+                             onerror="this.src='https://placehold.co/600x450/fce7f3/c084fc?text=Adopt+Pets'">
+                    </div>
+                </div>
+            </div>
 
-   </html>
+            <!-- Pet Categories Quick Navigation -->
+            <div class="p-6 sm:p-10 bg-pastelPurple border-b border-purple-200">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-extrabold text-purple-950 font-heading sketch-underline">Browse by Category</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div onclick="navigateTo('adopt', 0)" class="bg-pastelPink p-6 rounded-2xl border-2 border-pink-200 text-center cursor-pointer hover:border-pink-400">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl text-pink-500 mx-auto mb-3">
+                            <i class="fa-solid fa-cat"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-purple-950">Kittens & Cats</h4>
+                        <p class="text-xs text-purple-700 mt-1">Playful & cuddly feline companions</p>
+                    </div>
+
+                    <div onclick="navigateTo('adopt', 1)" class="bg-pastelBlue p-6 rounded-2xl border-2 border-sky-200 text-center cursor-pointer hover:border-sky-400">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl text-sky-500 mx-auto mb-3">
+                            <i class="fa-solid fa-dog"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-purple-950">Puppies & Dogs</h4>
+                        <p class="text-xs text-purple-700 mt-1">Loyal, friendly & active partners</p>
+                    </div>
+
+                    <div onclick="navigateTo('adopt', 2)" class="bg-pastelLavender p-6 rounded-2xl border-2 border-indigo-200 text-center cursor-pointer hover:border-indigo-400">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-2xl text-indigo-500 mx-auto mb-3">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <h4 class="font-bold text-lg text-purple-950">Senior Pets</h4>
+                        <p class="text-xs text-purple-700 mt-1">Gentle, calm & ready for cozy homes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Pets Section -->
+            <div id="featuredPets" class="p-6 sm:p-10 bg-pastelLavender border-b border-purple-200">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-purple-950 font-heading sketch-underline">
+                        Featured Pets Ready For Adoption
+                    </h3>
+                    <p class="text-sm text-purple-800 mt-2">Click "View Profile" to see their full detailed portfolio page</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Pet Card 1 (Alex) -->
+                    <div class="bg-pastelBlue p-5 rounded-2xl border-2 border-sky-200 flex flex-col justify-between">
+                        <div>
+                            <div class="relative aspect-video rounded-xl overflow-hidden mb-4 border border-sky-200">
+                                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80" alt="Alex" class="w-full h-full object-cover">
+                                <span class="absolute top-2 left-2 bg-pastelGreen text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-300">
+                                    <i class="fa-solid fa-circle-check mr-1"></i> Fully Vaccinated
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-xl font-extrabold text-purple-950">Alex</h4>
+                                <span class="text-xs font-bold text-pink-600 bg-pastelPink px-2.5 py-1 rounded-full">Female ♀</span>
+                            </div>
+                            <p class="text-xs text-purple-800 mb-3"><strong>Age:</strong> 11 months • <strong>Weight:</strong> 8 lbs</p>
+                            <p class="text-xs text-purple-900 leading-relaxed mb-4">Friendly, energetic, and loves playing with soft toys! Cuddly kitten looking for love.</p>
+                        </div>
+                        <button onclick="navigateTo('adopt', 0)" class="w-full py-2.5 bg-purple-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2">
+                            <span>View Full Profile</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Pet Card 2 (Bella) -->
+                    <div class="bg-pastelPink p-5 rounded-2xl border-2 border-pink-200 flex flex-col justify-between">
+                        <div>
+                            <div class="relative aspect-video rounded-xl overflow-hidden mb-4 border border-pink-200">
+                                <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80" alt="Bella" class="w-full h-full object-cover">
+                                <span class="absolute top-2 left-2 bg-pastelGreen text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-300">
+                                    <i class="fa-solid fa-circle-check mr-1"></i> Fully Vaccinated
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-xl font-extrabold text-purple-950">Bella</h4>
+                                <span class="text-xs font-bold text-pink-600 bg-pastelPink px-2.5 py-1 rounded-full">Female ♀</span>
+                            </div>
+                            <p class="text-xs text-purple-800 mb-3"><strong>Age:</strong> 5 months • <strong>Weight:</strong> 14 lbs</p>
+                            <p class="text-xs text-purple-900 leading-relaxed mb-4">Sweet-natured Golden Retriever puppy who loves outdoor walks and learning tricks.</p>
+                        </div>
+                        <button onclick="navigateTo('adopt', 1)" class="w-full py-2.5 bg-purple-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2">
+                            <span>View Full Profile</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Pet Card 3 (Max) -->
+                    <div class="bg-pastelPurple p-5 rounded-2xl border-2 border-purple-200 flex flex-col justify-between">
+                        <div>
+                            <div class="relative aspect-video rounded-xl overflow-hidden mb-4 border border-purple-200">
+                                <img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=600&q=80" alt="Max" class="w-full h-full object-cover">
+                                <span class="absolute top-2 left-2 bg-pastelRed text-rose-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-rose-300">
+                                    <i class="fa-solid fa-circle-xmark mr-1"></i> Vaccine Pending
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-xl font-extrabold text-purple-950">Max</h4>
+                                <span class="text-xs font-bold text-sky-600 bg-pastelBlue px-2.5 py-1 rounded-full">Male ♂</span>
+                            </div>
+                            <p class="text-xs text-purple-800 mb-3"><strong>Age:</strong> 2 years • <strong>Weight:</strong> 11 lbs</p>
+                            <p class="text-xs text-purple-900 leading-relaxed mb-4">Calm and observant tabby companion who loves cozy sunny spots on sofas.</p>
+                        </div>
+                        <button onclick="navigateTo('adopt', 2)" class="w-full py-2.5 bg-purple-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2">
+                            <span>View Full Profile</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Why Adopt Us / Simple Adoption Steps -->
+            <div class="p-6 sm:p-10 bg-pastelBlue">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-extrabold text-purple-950 font-heading sketch-underline">Our Simple Adoption Process</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+                    <div class="bg-pastelPink p-6 rounded-2xl border border-pink-200">
+                        <span class="w-10 h-10 bg-pink-400 text-white font-extrabold rounded-full inline-flex items-center justify-center text-lg mb-3">1</span>
+                        <h4 class="font-bold text-base text-purple-950 mb-1">Select a Pet</h4>
+                        <p class="text-xs text-purple-800">Browse pet portfolios and check their health and vaccination records.</p>
+                    </div>
+                    <div class="bg-pastelLavender p-6 rounded-2xl border border-indigo-200">
+                        <span class="w-10 h-10 bg-purple-500 text-white font-extrabold rounded-full inline-flex items-center justify-center text-lg mb-3">2</span>
+                        <h4 class="font-bold text-base text-purple-950 mb-1">Submit Application</h4>
+                        <p class="text-xs text-purple-800">Click "Adopt Me!" on the portfolio page to submit your details.</p>
+                    </div>
+                    <div class="bg-pastelGreen p-6 rounded-2xl border border-emerald-200">
+                        <span class="w-10 h-10 bg-emerald-500 text-white font-extrabold rounded-full inline-flex items-center justify-center text-lg mb-3">3</span>
+                        <h4 class="font-bold text-base text-purple-950 mb-1">Welcome Home</h4>
+                        <p class="text-xs text-purple-800">Our care staff approves your request and schedules your pet pickup!</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================================================================= -->
+        <!-- 2. ADOPT / PROFILE PAGE VIEW                                      -->
+        <!-- ================================================================= -->
+        <section id="adoptPage" class="page-view">
+            
+            <!-- Page Header Ribbon -->
+            <div class="bg-pastelLavender px-6 py-4 border-b border-purple-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <button onclick="navigateTo('home')" class="text-xs font-bold text-purple-800 bg-pastelPurple px-4 py-2 rounded-xl border border-purple-200 flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </button>
+
+                <!-- Pet Selector Switcher Tabs -->
+                <div class="flex items-center bg-pastelPink rounded-full p-1.5 border border-purple-200">
+                    <span class="text-xs font-bold text-purple-700 px-3 uppercase tracking-wider hidden sm:inline">Select Pet:</span>
+                    <div id="petTabs" class="flex gap-1">
+                        <!-- Rendered dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Title Header -->
+            <div class="pt-8 pb-4 text-center bg-pastelPurple">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-purple-950 tracking-wider font-heading uppercase sketch-underline">
+                    MY PETS
+                </h2>
+                <p class="text-purple-700 text-sm mt-3 font-medium">Pet Adoption Portfolio View</p>
+            </div>
+
+            <!-- Main Interactive Content Grid -->
+            <div class="p-6 sm:p-10 bg-pastelPurple grid grid-cols-1 md:grid-cols-12 gap-8 items-start border-b border-purple-200">
+                
+                <!-- LEFT SIDE: Portfolio Table Details -->
+                <div class="md:col-span-7 flex flex-col justify-between space-y-6">
+                    <div class="bg-pastelLavender p-1 rounded-2xl border-2 border-purple-200">
+                        
+                        <!-- Table Card Container -->
+                        <div class="bg-pastelBlue rounded-xl p-5 sm:p-6 space-y-4">
+                            <div class="flex items-center justify-between pb-3 border-b border-purple-200">
+                                <span class="text-xs font-bold text-purple-700 uppercase tracking-widest bg-purple-200 px-3 py-1 rounded-full">
+                                    Pet Profile Summary
+                                </span>
+                                <span id="petBreedBadge" class="text-xs font-bold text-purple-800 bg-purple-100 px-3 py-1 rounded-full border border-purple-200">
+                                    Kitten / Domestic Short Hair
+                                </span>
+                            </div>
+
+                            <!-- Portfolio Table -->
+                            <table class="w-full text-left border-collapse">
+                                <tbody class="divide-y divide-purple-100">
+                                    <tr class="border-b border-purple-100">
+                                        <th class="py-3.5 px-3 text-purple-900 font-bold text-base whitespace-nowrap w-40">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fa-solid fa-tag text-pink-500"></i> 
+                                                <span>Name :</span>
+                                            </div>
+                                        </th>
+                                        <td id="petName" class="py-3.5 px-3 text-purple-950 font-extrabold text-xl">
+                                            Alex
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-purple-100">
+                                        <th class="py-3.5 px-3 text-purple-900 font-bold text-base whitespace-nowrap w-40">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fa-solid fa-cake-candles text-purple-500"></i> 
+                                                <span>Age :</span>
+                                            </div>
+                                        </th>
+                                        <td id="petAge" class="py-3.5 px-3 text-purple-900 font-semibold text-base">
+                                            11 months
+                                        </td>
+                                    </tr>
+                                    <tr class="border-b border-purple-100">
+                                        <th class="py-3.5 px-3 text-purple-900 font-bold text-base whitespace-nowrap w-40">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fa-solid fa-weight-scale text-sky-500"></i> 
+                                                <span>Weight :</span>
+                                            </div>
+                                        </th>
+                                        <td id="petWeight" class="py-3.5 px-3 text-purple-900 font-semibold text-base">
+                                            8 pounds
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="py-3.5 px-3 text-purple-900 font-bold text-base whitespace-nowrap w-40 align-top pt-4">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fa-solid fa-quote-left text-pink-500"></i> 
+                                                <span>Description :</span>
+                                            </div>
+                                        </th>
+                                        <td id="petDesc" class="py-3.5 px-3 text-purple-900 font-medium text-sm leading-relaxed pt-4">
+                                            Friendly, energetic, and loves playing with soft toys! Very cuddly and gets along well with kids.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Additional Info Badges -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-pastelBlue rounded-xl p-3 border border-sky-200 text-center">
+                            <span class="block text-xs text-sky-700 font-medium">Energy Level</span>
+                            <span id="petEnergy" class="text-sm font-bold text-sky-900">High ⚡</span>
+                        </div>
+                        <div class="bg-pastelPink rounded-xl p-3 border border-pink-200 text-center">
+                            <span class="block text-xs text-pink-700 font-medium">Personality</span>
+                            <span id="petPersonality" class="text-sm font-bold text-pink-900">Playful 🎾</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE: Pet Image & Status Indicators -->
+                <div class="md:col-span-5 flex flex-col items-center justify-between space-y-6">
+                    
+                    <!-- Pet Image Box -->
+                    <div class="w-full relative">
+                        <div class="aspect-[4/5] w-full rounded-2xl overflow-hidden border-4 border-purple-200 bg-pastelLavender">
+                            <img id="petImg" 
+                                 src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80" 
+                                 alt="Alex the pet" 
+                                 class="w-full h-full object-cover rounded-xl"
+                                 onerror="this.src='https://placehold.co/400x500/fce7f3/c084fc?text=Cute+Pet+Image'">
+                            
+                            <!-- Favorite Heart Button -->
+                            <button id="likeBtn" onclick="toggleFavorite()" class="absolute top-3 right-3 bg-pastelPink p-2.5 rounded-full text-pink-600 border border-pink-200">
+                                <i id="likeIcon" class="fa-regular fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Status Icons Area Below Image -->
+                    <div class="w-full bg-pastelLavender p-4 rounded-2xl border border-purple-200 flex items-center justify-around">
+                        
+                        <!-- Vaccination Status Icon Indicator (Tick '✔' or '✖') -->
+                        <div class="flex flex-col items-center text-center" title="Vaccination Status">
+                            <div id="vaccineIconBox" class="w-12 h-12 rounded-full bg-pastelGreen border-2 border-emerald-400 flex items-center justify-center text-emerald-600 text-xl mb-1">
+                                <i id="vaccineIcon" class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <span id="vaccineLabel" class="text-[11px] font-bold text-emerald-800">Vaccinated</span>
+                        </div>
+
+                        <!-- Gender Icon Indicator -->
+                        <div class="flex flex-col items-center text-center" title="Gender">
+                            <div id="genderIconBox" class="w-12 h-12 rounded-full bg-pastelPink border-2 border-pink-300 flex items-center justify-center text-pink-600 text-xl mb-1">
+                                <i id="genderIcon" class="fa-solid fa-venus"></i>
+                            </div>
+                            <span id="genderLabel" class="text-[11px] font-bold text-pink-800">Female ♀</span>
+                        </div>
+
+                        <!-- Availability Status Indicator -->
+                        <div class="flex flex-col items-center text-center" title="Availability">
+                            <div class="w-12 h-12 rounded-full bg-pastelBlue border-2 border-sky-300 flex items-center justify-center text-sky-600 text-xl mb-1">
+                                <i class="fa-solid fa-house-chimney-window"></i>
+                            </div>
+                            <span class="text-[11px] font-bold text-sky-800">Available</span>
+                        </div>
+
+                    </div>
+
+                    <!-- Action Adoption Buttons -->
+                    <div class="w-full flex gap-3">
+                        <button id="adoptMeBtn" onclick="openModal()" class="flex-1 py-3.5 bg-pink-400 hover:bg-pink-500 text-white font-extrabold rounded-2xl border border-pink-500 flex items-center justify-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Adopt Me!</span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================================= -->
+        <!-- 3. CONTACT PAGE VIEW (NEW)                                        -->
+        <!-- ================================================================= -->
+        <section id="contactPage" class="page-view">
+            
+            <!-- Contact Header Banner -->
+            <div class="pt-8 pb-6 text-center bg-pastelPurple border-b border-purple-200">
+                <span class="bg-pastelPink text-pink-700 font-bold px-3 py-1 rounded-full text-xs uppercase tracking-wider border border-pink-200 inline-block mb-3">
+                    💌 We'd Love To Hear From You
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-purple-950 tracking-wider font-heading uppercase sketch-underline">
+                    GET IN TOUCH WITH US
+                </h2>
+                <p class="text-purple-800 text-sm mt-3 font-medium max-w-xl mx-auto px-4">
+                    Have questions about adoption procedures, shelter visits, volunteering, or donations? Send us a message or visit our adoption center!
+                </p>
+            </div>
+
+            <!-- Contact Information Summary Cards -->
+            <div class="p-6 sm:p-10 bg-pastelBlue border-b border-sky-200">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    
+                    <!-- Card 1: Address -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-sky-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-pastelBlue rounded-xl flex items-center justify-center text-sky-600 text-xl mb-3">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <h4 class="font-extrabold text-base text-purple-950 mb-1">Visit Shelter</h4>
+                            <p class="text-xs text-purple-800 leading-relaxed">
+                                124 Pet Haven Lane,<br>
+                                Soft Paws City, SP 90210
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-sky-100 flex items-center justify-between text-[11px] font-bold text-sky-700">
+                            <span>Main Shelter Office</span>
+                            <i class="fa-solid fa-map-pin"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Phone -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-pink-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-pastelPink rounded-xl flex items-center justify-center text-pink-600 text-xl mb-3">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <h4 class="font-extrabold text-base text-purple-950 mb-1">Call Us</h4>
+                            <p class="text-xs text-purple-800 leading-relaxed">
+                                Helpline: (555) 729-7387<br>
+                                Emergency: (555) 911-PAWS
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-pink-100 flex items-center justify-between text-[11px] font-bold text-pink-600">
+                            <span>Mon-Sat (9am - 6pm)</span>
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Email -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-purple-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-pastelPurple rounded-xl flex items-center justify-center text-purple-600 text-xl mb-3">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </div>
+                            <h4 class="font-extrabold text-base text-purple-950 mb-1">Email Us</h4>
+                            <p class="text-xs text-purple-800 leading-relaxed">
+                                hello@pawsandhearts.org<br>
+                                adopt@pawsandhearts.org
+                            </p>
+                        </div>
+                        <button onclick="copyEmail()" class="mt-4 pt-3 border-t border-purple-100 flex items-center justify-between text-[11px] font-bold text-purple-700 hover:text-purple-900">
+                            <span id="copyEmailText">Click to copy email</span>
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <!-- Card 4: Hours -->
+                    <div class="bg-white p-5 rounded-2xl border-2 border-emerald-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-pastelGreen rounded-xl flex items-center justify-center text-emerald-600 text-xl mb-3">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <h4 class="font-extrabold text-base text-purple-950 mb-1">Visiting Hours</h4>
+                            <p class="text-xs text-purple-800 leading-relaxed">
+                                Mon - Sat: 10:00 AM - 6:00 PM<br>
+                                Sunday: 12:00 PM - 4:00 PM
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-emerald-100 flex items-center justify-between text-[11px] font-bold text-emerald-700">
+                            <span>Open 7 Days a Week</span>
+                            <i class="fa-solid fa-door-open"></i>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Contact Interactive Form & FAQ Section Grid -->
+            <div class="p-6 sm:p-10 bg-pastelPurple grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Side: Interactive Contact Form -->
+                <div class="md:col-span-7 bg-white p-6 sm:p-8 rounded-3xl border-2 border-purple-200 shadow-sm">
+                    <div class="mb-6">
+                        <h3 class="text-2xl font-extrabold text-purple-950 font-heading flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-pink-500"></i>
+                            <span>Send Us A Direct Message</span>
+                        </h3>
+                        <p class="text-xs text-purple-800 mt-1">Fill out the form below and our shelter coordinators will reply within 24 hours.</p>
+                    </div>
+
+                    <form id="contactForm" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-purple-900 mb-1">Your Name *</label>
+                                <input type="text" id="contactName" required placeholder="Jane Smith" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400 bg-pastelPurple/30">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-purple-900 mb-1">Email Address *</label>
+                                <input type="email" id="contactEmail" required placeholder="jane@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400 bg-pastelPurple/30">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-purple-900 mb-1">Inquiry Type *</label>
+                                <select id="contactCategory" required class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400 bg-pastelPurple/30 font-medium">
+                                    <option value="General Question">General Adoption Question</option>
+                                    <option value="Specific Pet Inquiry">Specific Pet Profile Inquiry</option>
+                                    <option value="Volunteering">Volunteering & Fostering</option>
+                                    <option value="Donation">Donations & Support</option>
+                                    <option value="Shelter Visit">Schedule a Shelter Visit</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-purple-900 mb-1">Pet Of Interest (Optional)</label>
+                                <select id="contactPet" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400 bg-pastelPurple/30 font-medium">
+                                    <option value="None">None / General</option>
+                                    <option value="Alex (Kitten)">Alex (Cat / Kitten)</option>
+                                    <option value="Bella (Puppy)">Bella (Golden Retriever)</option>
+                                    <option value="Max (Tabby)">Max (Senior Tabby Cat)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-purple-900 mb-1">Subject *</label>
+                            <input type="text" id="contactSubject" required placeholder="e.g., Inquiring about meeting Alex this weekend" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400 bg-pastelPurple/30">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-purple-900 mb-1">Your Message *</label>
+                            <textarea id="contactMessage" rows="4" required placeholder="Write your questions or details here..." class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400 bg-pastelPurple/30"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 bg-purple-500 hover:bg-purple-600 text-white font-extrabold rounded-2xl border border-purple-600 flex items-center justify-center gap-2 shadow-sm text-sm">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>Send Message To Shelter</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Side: FAQ Section -->
+                <div class="md:col-span-5 space-y-6">
+                    <div class="bg-pastelLavender p-6 rounded-3xl border-2 border-purple-200 shadow-sm">
+                        <h3 class="text-xl font-extrabold text-purple-950 font-heading mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-question text-purple-600"></i>
+                            <span>Frequently Asked Questions</span>
+                        </h3>
+
+                        <!-- FAQ Accordion Container -->
+                        <div class="space-y-3">
+                            
+                            <!-- FAQ 1 -->
+                            <div class="bg-white rounded-2xl border border-purple-200 overflow-hidden">
+                                <button onclick="toggleFaq(1)" class="w-full px-4 py-3 text-left font-bold text-xs sm:text-sm text-purple-950 flex justify-between items-center bg-pastelPink/40">
+                                    <span>How does the pet adoption process work?</span>
+                                    <i id="faqIcon1" class="fa-solid fa-chevron-down text-purple-600 text-xs"></i>
+                                </button>
+                                <div id="faqAnswer1" class="hidden px-4 py-3 text-xs text-purple-800 leading-relaxed border-t border-purple-100 bg-white">
+                                    Select a pet, fill out the simple online adoption application form, and our care staff will review it within 24-48 hours. Once approved, we invite you to meet your pet and finalize pickup!
+                                </div>
+                            </div>
+
+                            <!-- FAQ 2 -->
+                            <div class="bg-white rounded-2xl border border-purple-200 overflow-hidden">
+                                <button onclick="toggleFaq(2)" class="w-full px-4 py-3 text-left font-bold text-xs sm:text-sm text-purple-950 flex justify-between items-center bg-pastelBlue/40">
+                                    <span>Are there any adoption fees?</span>
+                                    <i id="faqIcon2" class="fa-solid fa-chevron-down text-purple-600 text-xs"></i>
+                                </button>
+                                <div id="faqAnswer2" class="hidden px-4 py-3 text-xs text-purple-800 leading-relaxed border-t border-purple-100 bg-white">
+                                    Our adoption fees range from $50 to $150 depending on the pet. This fee covers full health checkups, initial vaccinations, microchipping, and spay/neuter procedures.
+                                </div>
+                            </div>
+
+                            <!-- FAQ 3 -->
+                            <div class="bg-white rounded-2xl border border-purple-200 overflow-hidden">
+                                <button onclick="toggleFaq(3)" class="w-full px-4 py-3 text-left font-bold text-xs sm:text-sm text-purple-950 flex justify-between items-center bg-pastelLavender">
+                                    <span>Can I visit the shelter without an appointment?</span>
+                                    <i id="faqIcon3" class="fa-solid fa-chevron-down text-purple-600 text-xs"></i>
+                                </button>
+                                <div id="faqAnswer3" class="hidden px-4 py-3 text-xs text-purple-800 leading-relaxed border-t border-purple-100 bg-white">
+                                    Yes! Visitors are welcome during regular visiting hours (Mon-Sat 10am-6pm, Sun 12pm-4pm). However, submitted applications receive priority for one-on-one meeting rooms.
+                                </div>
+                            </div>
+
+                            <!-- FAQ 4 -->
+                            <div class="bg-white rounded-2xl border border-purple-200 overflow-hidden">
+                                <button onclick="toggleFaq(4)" class="w-full px-4 py-3 text-left font-bold text-xs sm:text-sm text-purple-950 flex justify-between items-center bg-pastelGreen/40">
+                                    <span>How can I volunteer or foster?</span>
+                                    <i id="faqIcon4" class="fa-solid fa-chevron-down text-purple-600 text-xs"></i>
+                                </button>
+                                <div id="faqAnswer4" class="hidden px-4 py-3 text-xs text-purple-800 leading-relaxed border-t border-purple-100 bg-white">
+                                    We always welcome foster homes and volunteers! Simply select "Volunteering & Fostering" in the contact form or send us an email to get started.
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Direct Emergency / Support Banner Box -->
+                    <div class="bg-pastelPink p-5 rounded-3xl border-2 border-pink-200 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-pink-500 text-2xl shrink-0">
+                            <i class="fa-solid fa-heart-circle-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-purple-950">Need Immediate Help?</h4>
+                            <p class="text-xs text-purple-800 mt-0.5">Call our support desk directly at <strong>(555) 729-7387</strong> for urgent rescue inquiries.</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- GLOBAL FOOTER -->
+        <footer class="bg-pastelLavender px-6 py-4 border-t border-purple-200 text-center text-xs text-purple-700 font-bold">
+            <p>© 2026 Paws & Hearts Pet Adoption Platform. Spreading love, one paw at a time! 🐾</p>
+        </footer>
+
+    </div>
+
+    <!-- ADOPTION APPLICATION MODAL FORM -->
+    <div id="adoptionModal" class="modal fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border-4 border-purple-200 max-w-md w-full p-6 space-y-4 shadow-xl">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-extrabold text-lg text-purple-950 flex items-center gap-2">
+                    <i class="fa-solid fa-paw text-pink-500"></i>
+                    <span>Adopt <span id="modalPetName" class="text-pink-500">Pet</span></span>
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="adoptionForm" onsubmit="handleAdoptionSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-purple-900 mb-1">Your Full Name</label>
+                    <input type="text" required placeholder="Jane Doe" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-purple-900 mb-1">Email Address</label>
+                    <input type="email" required placeholder="jane@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-purple-900 mb-1">Phone Number</label>
+                    <input type="tel" required placeholder="(555) 000-0000" class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-purple-900 mb-1">Message to Shelter</label>
+                    <textarea rows="3" placeholder="Tell us a little bit about your home environment..." class="w-full px-3.5 py-2.5 rounded-xl border border-purple-200 text-sm focus:outline-none focus:border-purple-400"></textarea>
+                </div>
+
+                <div class="pt-2 flex gap-3">
+                    <button type="button" onclick="closeModal()" class="w-1/2 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600">
+                        Cancel
+                    </button>
+                    <button type="submit" class="w-1/2 py-2.5 bg-purple-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Submit Application</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- GENERIC FEEDBACK MODAL (Replaces standard alert) -->
+    <div id="feedbackModal" class="modal fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border-4 border-purple-200 max-w-sm w-full p-6 text-center space-y-4 shadow-xl">
+            <div id="feedbackIconBox" class="w-16 h-16 rounded-full bg-pastelGreen text-emerald-600 text-3xl flex items-center justify-center mx-auto">
+                <i id="feedbackIcon" class="fa-solid fa-circle-check"></i>
+            </div>
+            <h3 id="feedbackTitle" class="font-extrabold text-xl text-purple-950 font-heading">Thank You!</h3>
+            <p id="feedbackMessage" class="text-xs text-purple-800 leading-relaxed font-medium">Your request has been submitted successfully.</p>
+            <button onclick="closeFeedbackModal()" class="w-full py-2.5 bg-purple-500 text-white rounded-xl text-xs font-bold">
+                Close & Continue
+            </button>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT STATE & INTERACTION SCRIPT -->
+    <script>
+        // Pet database definitions
+        const petsData = [
+            {
+                id: 0,
+                name: "Alex",
+                breed: "Kitten / Domestic Short Hair",
+                age: "11 months",
+                weight: "8 pounds",
+                description: "Friendly, energetic, and loves playing with soft toys! Very cuddly and gets along well with kids.",
+                energy: "High ⚡",
+                personality: "Playful 🎾",
+                vaccinated: true,
+                gender: "Female ♀",
+                isFemale: true,
+                img: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 1,
+                name: "Bella",
+                breed: "Golden Retriever / Puppy",
+                age: "5 months",
+                weight: "14 pounds",
+                description: "Sweet-natured Golden Retriever puppy who loves outdoor walks, belly rubs, and learning new tricks.",
+                energy: "Very High ⚡⚡",
+                personality: "Affectionate 💛",
+                vaccinated: true,
+                gender: "Female ♀",
+                isFemale: true,
+                img: "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "Max",
+                breed: "Tabby Cat / Senior",
+                age: "2 years",
+                weight: "11 pounds",
+                description: "Calm and observant tabby companion who loves cozy sunny spots on sofas and relaxing music.",
+                energy: "Calm 💤",
+                personality: "Observant 🧐",
+                vaccinated: false,
+                gender: "Male ♂",
+                isFemale: false,
+                img: "https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        let currentPetIndex = 0;
+        let cartCount = 0;
+        let favoritesState = { 0: false, 1: false, 2: false };
+
+        // Page Navigation Router (Home, Adopt, Contact)
+        function navigateTo(pageId, petIndex = null) {
+            document.querySelectorAll('.page-view').forEach(el => el.classList.remove('active-page'));
+            
+            const homeBtn = document.getElementById('navHomeBtn');
+            const adoptBtn = document.getElementById('navAdoptBtn');
+            const contactBtn = document.getElementById('navContactBtn');
+
+            // Reset navigation tab styling
+            const inactiveClass = "px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold text-purple-800 hover:bg-purple-100";
+            const activeClass = "px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-purple-500 text-white";
+
+            homeBtn.className = inactiveClass;
+            adoptBtn.className = inactiveClass;
+            contactBtn.className = inactiveClass;
+
+            if (pageId === 'home') {
+                document.getElementById('homePage').classList.add('active-page');
+                homeBtn.className = activeClass;
+            } else if (pageId === 'adopt') {
+                document.getElementById('adoptPage').classList.add('active-page');
+                adoptBtn.className = activeClass;
+                
+                if (petIndex !== null) {
+                    selectPet(petIndex);
+                }
+            } else if (pageId === 'contact') {
+                document.getElementById('contactPage').classList.add('active-page');
+                contactBtn.className = activeClass;
+
+                if (petIndex !== null) {
+                    document.getElementById('contactPet').selectedIndex = petIndex + 1;
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // Render Pet Selector Buttons in adopt view header
+        function renderPetTabs() {
+            const tabsContainer = document.getElementById('petTabs');
+            tabsContainer.innerHTML = petsData.map((pet, idx) => `
+                <button onclick="selectPet(${idx})" class="px-3 py-1.5 rounded-full text-xs font-bold ${idx === currentPetIndex ? 'bg-purple-500 text-white' : 'text-purple-800 hover:bg-purple-100'}">
+                    ${pet.name}
+                </button>
+            `).join('');
+        }
+
+        // Populate Portfolio details based on selected pet index
+        function selectPet(index) {
+            currentPetIndex = index;
+            const pet = petsData[index];
+
+            document.getElementById('petName').innerText = pet.name;
+            document.getElementById('petBreedBadge').innerText = pet.breed;
+            document.getElementById('petAge').innerText = pet.age;
+            document.getElementById('petWeight').innerText = pet.weight;
+            document.getElementById('petDesc').innerText = pet.description;
+            document.getElementById('petEnergy').innerText = pet.energy;
+            document.getElementById('petPersonality').innerText = pet.personality;
+            document.getElementById('petImg').src = pet.img;
+            document.getElementById('modalPetName').innerText = pet.name;
+
+            // Update Vaccination Indicator (Tick '✔' or '✖')
+            const vBox = document.getElementById('vaccineIconBox');
+            const vIcon = document.getElementById('vaccineIcon');
+            const vLabel = document.getElementById('vaccineLabel');
+            if (pet.vaccinated) {
+                vBox.className = "w-12 h-12 rounded-full bg-pastelGreen border-2 border-emerald-400 flex items-center justify-center text-emerald-600 text-xl mb-1";
+                vIcon.className = "fa-solid fa-circle-check";
+                vLabel.className = "text-[11px] font-bold text-emerald-800";
+                vLabel.innerText = "Vaccinated";
+            } else {
+                vBox.className = "w-12 h-12 rounded-full bg-pastelRed border-2 border-rose-400 flex items-center justify-center text-rose-600 text-xl mb-1";
+                vIcon.className = "fa-solid fa-circle-xmark";
+                vLabel.className = "text-[11px] font-bold text-rose-800";
+                vLabel.innerText = "Pending";
+            }
+
+            // Update Gender Indicator
+            const gBox = document.getElementById('genderIconBox');
+            const gIcon = document.getElementById('genderIcon');
+            const gLabel = document.getElementById('genderLabel');
+            if (pet.isFemale) {
+                gBox.className = "w-12 h-12 rounded-full bg-pastelPink border-2 border-pink-300 flex items-center justify-center text-pink-600 text-xl mb-1";
+                gIcon.className = "fa-solid fa-venus";
+                gLabel.className = "text-[11px] font-bold text-pink-800";
+                gLabel.innerText = pet.gender;
+            } else {
+                gBox.className = "w-12 h-12 rounded-full bg-pastelBlue border-2 border-sky-300 flex items-center justify-center text-sky-600 text-xl mb-1";
+                gIcon.className = "fa-solid fa-mars";
+                gLabel.className = "text-[11px] font-bold text-sky-800";
+                gLabel.innerText = pet.gender;
+            }
+
+            // Sync Heart Button state
+            updateLikeUI();
+            renderPetTabs();
+        }
+
+        // Like / Favorite Button Toggle
+        function toggleFavorite() {
+            favoritesState[currentPetIndex] = !favoritesState[currentPetIndex];
+            updateLikeUI();
+        }
+
+        function updateLikeUI() {
+            const isLiked = favoritesState[currentPetIndex];
+            const likeIcon = document.getElementById('likeIcon');
+            if (isLiked) {
+                likeIcon.className = "fa-solid fa-heart text-xl text-pink-600";
+            } else {
+                likeIcon.className = "fa-regular fa-heart text-xl text-pink-600";
+            }
+        }
+
+        // Modal Form Handlers
+        function openModal() {
+            document.getElementById('adoptionModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('adoptionModal').classList.remove('active');
+        }
+
+        function handleAdoptionSubmit(e) {
+            e.preventDefault();
+            cartCount++;
+            document.getElementById('cartCount').innerText = cartCount;
+            closeModal();
+            showFeedbackModal(`Application Submitted!`, `Your adoption request for ${petsData[currentPetIndex].name} has been received. Our shelter team will get in touch shortly!`);
+            document.getElementById('adoptionForm').reset();
+        }
+
+        // Contact Form Submission Handler
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const category = document.getElementById('contactCategory').value;
+            
+            showFeedbackModal(
+                `Message Sent!`, 
+                `Thank you ${name}! Your inquiry regarding "${category}" has been sent to our shelter team. We will reply within 24 hours.`
+            );
+            document.getElementById('contactForm').reset();
+        }
+
+        // Custom Feedback Modal (Alert Replacement)
+        function showFeedbackModal(title, message) {
+            document.getElementById('feedbackTitle').innerText = title;
+            document.getElementById('feedbackMessage').innerText = message;
+            document.getElementById('feedbackModal').classList.add('active');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('active');
+        }
+
+        // Accordion FAQ Switcher
+        function toggleFaq(num) {
+            const ans = document.getElementById(`faqAnswer${num}`);
+            const icon = document.getElementById(`faqIcon${num}`);
+            if (ans.classList.contains('hidden')) {
+                ans.classList.remove('hidden');
+                icon.className = "fa-solid fa-chevron-up text-purple-600 text-xs";
+            } else {
+                ans.classList.add('hidden');
+                icon.className = "fa-solid fa-chevron-down text-purple-600 text-xs";
+            }
+        }
+
+        // Helper to copy email to clipboard
+        function copyEmail() {
+            const email = "hello@pawsandhearts.org";
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = email;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            
+            const copyText = document.getElementById('copyEmailText');
+            copyText.innerText = "Copied to clipboard!";
+            setTimeout(() => {
+                copyText.innerText = "Click to copy email";
+            }, 2500);
+        }
+
+        // Initial setup on page load
+        renderPetTabs();
+        selectPet(0);
+    </script>
+
+</body>
+</html>
